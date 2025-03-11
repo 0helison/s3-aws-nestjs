@@ -1,0 +1,8 @@
+services:
+  s3-nestjs:
+    build: . 
+    container_name: s3_app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/home/node/app
