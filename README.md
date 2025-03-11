@@ -22,7 +22,7 @@ docker-compose up --build -d
 #### Then run the next command:
 
 ```bash
-docker-compose exec -it bff bash
+docker-compose exec -it s3-nestjs bash
 ```
 
 #### * All commands from now on must be done in a bash terminal inside the container *
