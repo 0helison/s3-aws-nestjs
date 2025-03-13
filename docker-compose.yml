@@ -1,8 +1,18 @@
 services:
   s3-nestjs:
-    build: . 
+    build: .
     container_name: s3_app
     ports:
       - "3000:3000"
     volumes:
       - .:/home/node/app
+    depends_on:
+      - localstack
+
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"

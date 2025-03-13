@@ -1,6 +1,6 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import { S3UploadService } from './upload.service';
 import { randomUUID } from 'crypto';
+import { S3UploadService } from '../upload.service';
 
 jest.mock('crypto', () => ({
   randomUUID: jest.fn(() => 'mocked-uuid'),
@@ -18,7 +18,7 @@ jest.mock('@aws-sdk/client-s3', () => {
 });
 
 describe('S3UploadService Unit Tests', () => {
-  let service: S3UploadService;
+  let s3UploadService: S3UploadService;
 
   const mockEnv = {
     S3_BUCKET_NAME: 'test-bucket',
@@ -32,7 +32,7 @@ describe('S3UploadService Unit Tests', () => {
   });
 
   beforeEach(() => {
-    service = new S3UploadService();
+    s3UploadService = new S3UploadService();
   });
 
   test('constructor', () => {
@@ -44,8 +44,8 @@ describe('S3UploadService Unit Tests', () => {
       },
     });
 
-    expect(service['awsS3Bucket']).toBe(mockEnv.S3_BUCKET_NAME);
-    expect(service).toBeDefined();
+    expect(s3UploadService['awsS3Bucket']).toBe(mockEnv.S3_BUCKET_NAME);
+    expect(s3UploadService).toBeDefined();
   });
 
   it('uploadFile should send file to S3', async () => {
@@ -57,7 +57,7 @@ describe('S3UploadService Unit Tests', () => {
 
     const uniqueName = `${randomUUID()}-${mockFile.originalname}`;
 
-    const result = await service.uploadFile(mockFile);
+    const result = await s3UploadService.uploadFile(mockFile);
 
     expect(PutObjectCommand).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -69,7 +69,7 @@ describe('S3UploadService Unit Tests', () => {
       }),
     );
     expect(PutObjectCommand).toHaveBeenCalledTimes(1);
-    expect(service['s3'].send).toHaveBeenCalled();
+    expect(s3UploadService['s3'].send).toHaveBeenCalled();
     expect(uniqueName).toBe('mocked-uuid-test-file.png');
     expect(result).toBe('mocked-s3-response');
   });
